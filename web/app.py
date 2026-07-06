@@ -143,19 +143,39 @@ def search(query, vectorizer, matrix, chunks_info, top_k=8):
 
 
 def search_originals(query):
-    """在 _originals 目录中搜索匹配的文件名"""
+    """在 _originals 目录中搜索匹配的文件名（支持模糊匹配）"""
     if not ORIGINALS_DIR.exists():
         return []
     results = []
     for f in ORIGINALS_DIR.rglob("*"):
         if f.is_file():
-            if query.lower() in f.name.lower():
+            fname_lower = f.name.lower()
+            query_lower = query.lower()
+            # 整体匹配 或 拆分词语后任一匹配
+            if query_lower in fname_lower or _any_word_match(query_lower, fname_lower):
                 results.append({
                     "name": f.name,
                     "path": str(f.relative_to(ORIGINALS_DIR)),
                     "full_path": str(f),
                 })
     return results
+
+
+def _any_word_match(query: str, target: str) -> bool:
+    """把查询拆成词，只要目标包含任一词就匹配"""
+    # 拆分中文：单字+词组
+    words = []
+    # 英文词
+    words.extend(re.findall(r'[a-zA-Z]+', query))
+    # 中文2字词组
+    chinese = re.findall(r'[一-鿿]', query)
+    for i in range(len(chinese) - 1):
+        words.append(''.join(chinese[i:i+2]))
+    for i in range(len(chinese) - 2):
+        words.append(''.join(chinese[i:i+3]))
+    # 只要目标包含任一词组就匹配
+    match_count = sum(1 for w in words if w.lower() in target)
+    return match_count >= 2  # 至少匹配2个词才算
 
 
 # ─── 初始化 ───
