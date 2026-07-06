@@ -305,7 +305,7 @@ def cmd_status():
             print("未提交的更改:")
             print(result.stdout)
         else:
-            print("Git: 工作区干净 ✓")
+            print("Git: 工作区干净")
 
         result = subprocess.run("git log --oneline -3", shell=True, capture_output=True, text=True)
         if result.stdout.strip():
