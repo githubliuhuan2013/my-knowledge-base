@@ -1,0 +1,18 @@
+# ChromaDB 索引数据（本地重建即可）
+_index/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/

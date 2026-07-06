@@ -1,0 +1,4 @@
+#!/bin/bash
+# kb - 知识库管理命令 (Git Bash / Linux / Mac)
+# 用法: kb new|import|list|search|sync|status
+python "E:/Rex/knowledge-base/_tools/kb.py" "$@"
